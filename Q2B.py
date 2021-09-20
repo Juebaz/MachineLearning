@@ -133,4 +133,4 @@ def plotClassicationGraphForFeatures(f1,f2,data):
         subfig.set_yticks(())
         subfig.set_title(title)
 
-        return fig
+    return fig
