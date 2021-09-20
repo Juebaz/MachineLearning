@@ -34,7 +34,6 @@ def plot_contours(ax, classificator, xx, yy, **params):
 
 
 def plotClassicationGraphForFeatures(f1, f2, data, titles, models):
-    regularizeParam = 1.0  # SVM regularization parameter
 
     X = data.data[:, [f1, f2]]
     y = data.target
@@ -81,15 +80,15 @@ def main():
 
     regularizeParam = 1.0  # SVM regularization parameter
 
-    classificators = (svm.SVC(kernel='linear', C=regularizeParam),
-              svm.LinearSVC(C=regularizeParam, max_iter=10000),
-              svm.SVC(kernel='rbf', gamma=0.7, C=regularizeParam),
-              svm.SVC(kernel='poly', degree=3, gamma='auto', C=regularizeParam))
+    classificators = (QuadraticDiscriminantAnalysis(),
+                      LinearDiscriminantAnalysis(),
+                      GaussianNB(),
+                      NearestCentroid())
 
-    titles = ('SVC with linear kernel',
-              'LinearSVC (linear kernel)',
-              'SVC with RBF kernel',
-              'SVC with polynomial (degree 3) kernel')
+    titles = ('QuadraticDiscriminantAnalysis',
+              'LinearDiscriminantAnalysis',
+              'GaussianNB',
+              'NearestCentroid')
 
     errors = {}
 
@@ -103,13 +102,12 @@ def main():
 
         errors[f'{f1_name} {f2_name}'] = errorForFeatures
 
-    # pyplot.show()
+    pyplot.show()
 
-    # # Affichage des erreurs / display errors
-    df = pandas.DataFrame(errors, index=['SVC with linear kernel',
-                                         'LinearSVC (linear kernel)',
-                                         'SVC with RBF kernel',
-                                         'SVC with polynomial (degree 3) kernel'])
+    df = pandas.DataFrame(errors, index=['QuadraticDiscriminantAnalysis',
+                                         'LinearDiscriminantAnalysis',
+                                         'GaussianNB',
+                                         'NearestCentroid'])
     display.display(df)
 
 
