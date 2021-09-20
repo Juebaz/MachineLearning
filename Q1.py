@@ -12,7 +12,7 @@ def createLegendHandelsFor(data, colormap, lables):
     norm = pyplot.Normalize(Y.min(), X.max())
 
     return [pyplot.Line2D([0, 0], [0, 0], color=colormap(norm(i)), marker='o', linestyle='', label=label)
-           for i, label in enumerate(lables)]
+            for i, label in enumerate(lables)]
 
 
 ExecutionMaxTime = 0.5
@@ -27,10 +27,12 @@ t1 = time.time()
 class_labels = data.target_names
 cmap = pyplot.get_cmap('viridis')
 
+
 for (f1, f2), subfig in zip(mesurementCombinaison, subfigs.reshape(-1)):
     xname = data.feature_names[f1]
     yname = data.feature_names[f2]
-    subfig.scatter(data.data[:, f1], data.data[:, f2], c=data.target, cmap='viridis')
+    subfig.scatter(data.data[:, f1], data.data[:, f2],
+                   c=data.target, cmap='viridis')
     subfig.set_xlabel(xname)
     subfig.set_ylabel(yname)
 
@@ -43,10 +45,9 @@ t2 = time.time()
 ### Ne pas modifier / do not modify ###
 duration = t2 - t1
 if duration > ExecutionMaxTime:
-    print(f"\x1b[31m[ATTENTION] Votre code pour la question Q2A "  +
-          f"met trop de temps à s'exécuter! Le temps maximum "    +
-          f"permis est de {ExecutionMaxTime:.4f} secondes, mais votre "   +
+    print(f"\x1b[31m[ATTENTION] Votre code pour la question Q2A " +
+          f"met trop de temps à s'exécuter! Le temps maximum " +
+          f"permis est de {ExecutionMaxTime:.4f} secondes, mais votre " +
           f"code a requis {duration:.4f} secondes! Assurez-vous " +
-          f"que vous ne faites pas d'appels bloquants (par "      +
+          f"que vous ne faites pas d'appels bloquants (par " +
           f"exemple à show()) dans cette boucle!\x1b[0m")
-
