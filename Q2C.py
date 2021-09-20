@@ -11,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import NearestCentroid
 import time
 import pandas
+from sklearn.model_selection import RepeatedKFold
 from IPython import display
 
 
@@ -96,3 +97,37 @@ if avgError > ERRMAX_Q2C_2:
 
 
 t1 = time.time()
+
+
+# *** TODO Q2C.3 ***
+
+
+# Déterminez la performance du classifieur selon un K-plis (K-fold), avec K=3
+# Determine classifier performance in a K-fold cross-validation manner, with K=3
+crossValGenerator = RepeatedKFold(n_splits=3, n_repeats=100, random_state=2652124)
+
+accurcy = 1- model_selection.cross_val_score(classificator, X, Y, cv=crossValGenerator)
+
+
+avgError = np.mean(accurcy)
+# Ajout de l'erreur pour affichage / add error for displaying
+erreurs['Validation 3-fold'] = avgError
+
+### Ne pas modifier / do not modify ###
+t2 = time.time()
+duration = t2 - t1
+if duration > TMAX_Q2C_3:
+    print(f"\x1b[31m[ATTENTION] Votre code pour la question Q2C.3 " +
+          f"met trop de temps à s'exécuter! Le temps maximum " +
+          f"permis est de {TMAX_Q2C_3:.4f} secondes, mais votre " +
+          f"code a requis {duration:.4f} secondes! Assurez-vous " +
+          f"que vous ne faites pas d'appels bloquants (par " +
+          f"exemple à show()) dans cette boucle!\x1b[0m")
+if avgError > ERRMAX_Q2C_3:
+    print(f"\x1b[31m[ATTENTION] Votre code pour la question Q2C.3 ne " +
+          f"produit pas les performances attendues! Le taux " +
+          f"d'erreur maximal attendu est de {ERRMAX_Q2C_3:.3f}, " +
+          f"mais l'erreur rapportée dans votre code est de " +
+          f"{avgError:.3f}!\x1b[0m")
+df = pandas.DataFrame(erreurs, index=['Erreurs'])
+display.display(df)
