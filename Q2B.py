@@ -48,7 +48,7 @@ def plotClassicationGraphForFeatures(f1, f2, data, titles, models):
                  data.feature_names[f2], fontsize=12)
 
     erreurs = []
-
+    t1 = time.time()
     for classificator, subfig, title in zip(models, subfigs.reshape(-1), titles):
         clf_name = title
 
@@ -70,6 +70,26 @@ def plotClassicationGraphForFeatures(f1, f2, data, titles, models):
         subfig.set_yticks(())
         subfig.set_title(title)
 
+    # ne pas modifier
+        t2 = time.time()
+        duration = t2 - t1
+        if duration > TMAX_Q2B:
+            print(f"\x1b[31m[ATTENTION] Votre code pour la question Q2B " +
+                  f"met trop de temps à s'exécuter! Le temps maximum " +
+                  f"permis est de {TMAX_Q2B:.4f} secondes, mais votre " +
+                  f"code a requis {duration:.4f} secondes! Assurez-vous " +
+                  f"que vous ne faites pas d'appels bloquants (par " +
+                  f"exemple à show()) dans cette boucle!\x1b[0m")
+
+    ### Ne pas modifier / do not modify ###
+
+    if err > ERRMAX_Q2B:
+        print(f"\x1b[31m[ATTENTION] Votre code pour la " +
+              f"question Q2B ne produit pas les performances" +
+              f"attendues! Le taux d'erreur maximal attendu " +
+              f"est de {ERRMAX_Q2B:.3f}, mais l'erreur " +
+              f"rapportée dans votre code est de {err:.3f}!\x1b[0m")
+
     return fig, erreurs
 
 
@@ -85,10 +105,10 @@ def main():
                       GaussianNB(),
                       NearestCentroid())
 
-    titles = ('QuadraticDiscriminantAnalysis',
+    titles = ['QuadraticDiscriminantAnalysis',
               'LinearDiscriminantAnalysis',
               'GaussianNB',
-              'NearestCentroid')
+              'NearestCentroid']
 
     errors = {}
 
@@ -97,17 +117,13 @@ def main():
         f2_name = iris.feature_names[f2]
         regularizeParam = 1.0  # SVM regularization parameter
 
-        fig, errorForFeatures = plotClassicationGraphForFeatures(
+        fig, err = plotClassicationGraphForFeatures(
             f1, f2, iris, titles, classificators)
 
-        errors[f'{f1_name} {f2_name}'] = errorForFeatures
+        errors[f'{f1_name} {f2_name}'] = err
 
     pyplot.show()
-
-    df = pandas.DataFrame(errors, index=['QuadraticDiscriminantAnalysis',
-                                         'LinearDiscriminantAnalysis',
-                                         'GaussianNB',
-                                         'NearestCentroid'])
+    df = pandas.DataFrame(errors, index=titles)
     display.display(df)
 
 
