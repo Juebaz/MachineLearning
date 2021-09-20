@@ -70,9 +70,9 @@ for x in range(0, 99):
 
     classificator.fit(X_train, Y_train)
 
-    err_train = 1 - \
-        metrics.accuracy_score(classificator.predict(X_train), Y_train)
-    errors.append(err_train)
+    err_test = 1 - \
+        metrics.accuracy_score(classificator.predict(X_test), Y_test)
+    errors.append(err_test)
 
 avgError = sum(errors)/100
 
@@ -101,16 +101,13 @@ t1 = time.time()
 
 # *** TODO Q2C.3 ***
 
-
-# Déterminez la performance du classifieur selon un K-plis (K-fold), avec K=3
-# Determine classifier performance in a K-fold cross-validation manner, with K=3
 crossValGenerator = RepeatedKFold(n_splits=3, n_repeats=100, random_state=2652124)
 
-accurcy = 1- model_selection.cross_val_score(classificator, X, Y, cv=crossValGenerator)
+err = 1- model_selection.cross_val_score(classificator, X, Y, cv=crossValGenerator)
 
 
-avgError = np.mean(accurcy)
-# Ajout de l'erreur pour affichage / add error for displaying
+avgError = np.mean(err)
+
 erreurs['Validation 3-fold'] = avgError
 
 ### Ne pas modifier / do not modify ###
