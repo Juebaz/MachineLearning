@@ -34,7 +34,7 @@ def createLegendHandelsFor(data, colormap, lables):
 
 
 
-def make_meshgrid(x, y, h=0.5):
+def make_meshgrid(x, y, h=0.2):
     x_min, x_max = x.min() - 1, x.max() + 1
     y_min, y_max = y.min() - 1, y.max() + 1
     xx, yy = numpy.meshgrid(numpy.arange(x_min, x_max, h),
@@ -119,7 +119,7 @@ for (f1, f2) in pairs:
         # real labels.
         # ******
 
-        plot_contours(subfig, clf, xx, yy, cmap=cmap, alpha=0.8)
+        plot_contours(subfig, clf, xx, yy, cmap=cmap, alpha=0.7)
 
         subfig.scatter(X0, X1, c=Y, cmap=cmap,
                        s=20, edgecolors='k')
