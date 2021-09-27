@@ -80,12 +80,14 @@ class ClassifieurAvecRejet:
 
         for index, x in enumerate(X):
             prob = probForEachXtoBeEachC[index, :]
-             
-            probMin = prob[numpy.argmin(prob)]
+            denominateur = numpy.sum(prob)
+            probNormalise = prob/denominateur
+
+            probMax = probNormalise[numpy.argmax(probNormalise)]
 
             rejectClass = len(self._classes)
-            if probMin > log(self._lambda):
-                print(prob[numpy.argmin(prob)])
+
+            if log(probMax) < log(1-self._lambda):
                 classWithHighiestProbForEachX.append(rejectClass)
 
             else:
@@ -127,7 +129,7 @@ if __name__ == "__main__":
         X, y, test_size=0.2, random_state=123
     )
 
-    nb = ClassifieurAvecRejet(0.7)
+    nb = ClassifieurAvecRejet(0.4)
     nb.fit(X_train, y_train)
     predictions = nb.predict(X_test)
     print(predictions)
