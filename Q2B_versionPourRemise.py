@@ -36,6 +36,7 @@ def make_meshgrid(x, y, h=.02):
 
 def plot_contours(ax, classificator, xx, yy, **params):
     Z = classificator.predict(np.c_[xx.ravel(), yy.ravel()])
+    print(Z)
     Z = Z.reshape(xx.shape)
     out = ax.contourf(xx, yy, Z, **params)
     return out

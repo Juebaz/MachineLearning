@@ -87,14 +87,14 @@ class ClassifieurAvecRejet:
 
             rejectClass = len(self._classes)
 
-            if log(probMax) < log(1-self._lambda):
+            if log(probMax) < log(self._lambda):
                 classWithHighiestProbForEachX.append(rejectClass)
 
             else:
                 classe = self._classes[numpy.argmax(prob)]
                 classWithHighiestProbForEachX.append(classe)
 
-        return classWithHighiestProbForEachX
+        return numpy.array(classWithHighiestProbForEachX)
 
         # *****
 
@@ -110,7 +110,7 @@ class ClassifieurAvecRejet:
         scores = []
         accuracy = numpy.sum(y == predictions) / len(y)
         rejectScore = (self._lambda*numpy.sum(y == rejectClass))/len(y)
-            
+
         return accuracy + rejectScore
 
 
