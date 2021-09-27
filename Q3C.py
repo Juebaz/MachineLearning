@@ -105,12 +105,13 @@ class ClassifieurAvecRejet:
         # Cette fonction peut supposer que fit() a préalablement été exécuté.
         # somme du coût des rejets et du coût des mauvais classements
         # *****
-
         predictions = self.predict(X)
+        rejectClass = len(self._classes)
         scores = []
-        for index, prediction in enumerate(predictions):
-            if y[index] == prediction:
-                scores.append(0)
+        accuracy = numpy.sum(y == predictions) / len(y)
+        rejectScore = (self._lambda*numpy.sum(y == rejectClass))/len(y)
+            
+        return accuracy + rejectScore
 
 
 # Testing
@@ -129,7 +130,8 @@ if __name__ == "__main__":
         X, y, test_size=0.2, random_state=123
     )
 
-    nb = ClassifieurAvecRejet(0.4)
+    nb = ClassifieurAvecRejet(0.9)
     nb.fit(X_train, y_train)
     predictions = nb.predict(X_test)
+    print(nb.score(X, y))
     print(predictions)
