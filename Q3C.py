@@ -7,7 +7,7 @@ import collections
 import pandas
 import numpy
 import time
-from math import log
+from math import log, exp
 
 matplotlib.rcParams['figure.figsize'] = (9.0, 7.0)
 
@@ -80,19 +80,21 @@ class ClassifieurAvecRejet:
 
         for index, x in enumerate(X):
             prob = probForEachXtoBeEachC[index, :]
-            denominateur = numpy.sum(prob)
-            probNormalise = prob/denominateur
+            # denominateur = numpy.linalg.norm(prob)  # normaliser ???
 
-            probMax = probNormalise[numpy.argmax(probNormalise)]
+            # probNormalise = prob/1
+            i = numpy.argmax(prob)
+            probMax = prob[i]
 
             rejectClass = len(self._classes)
+            lambaLog = log(1-self._lambda)
+            print(probMax, lambaLog)
+            # if probMax > lambaLog:
+            #    classWithHighiestProbForEachX.append(5)
 
-            if log(probMax) < log(self._lambda):
-                classWithHighiestProbForEachX.append(rejectClass)
-
-            else:
-                classe = self._classes[numpy.argmax(prob)]
-                classWithHighiestProbForEachX.append(classe)
+            # else:
+            classe = self._classes[i]
+            classWithHighiestProbForEachX.append(classe)
 
         return numpy.array(classWithHighiestProbForEachX)
 
@@ -112,26 +114,3 @@ class ClassifieurAvecRejet:
         rejectScore = (self._lambda*numpy.sum(y == rejectClass))/len(y)
 
         return accuracy + rejectScore
-
-
-# Testing
-if __name__ == "__main__":
-    # Imports
-    from sklearn.model_selection import train_test_split
-    from sklearn import datasets
-
-    dataset = datasets.load_iris()
-    X = dataset.data
-    y = dataset.target
-    # X, y = datasets.make_classification(
-    #     n_samples=1000, n_features=10, n_classes=2, random_state=123
-    # )
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=123
-    )
-
-    nb = ClassifieurAvecRejet(0.9)
-    nb.fit(X_train, y_train)
-    predictions = nb.predict(X_test)
-    print(nb.score(X, y))
-    print(predictions)
