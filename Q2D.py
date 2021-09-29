@@ -89,3 +89,7 @@ if duration > TMAX_Q2D:
           f"exemple à show()) dans cette boucle!\x1b[0m")
 df = pandas.DataFrame(erreurs, index=['Erreurs'])
 display.display(df)
+
+# ***********************REPONSE QUESTION 3D ******************************
+# Les classificateurs gaussian et quadratique semblent les plus approprié.
+#  Ils ont tout deux des erreurs de 0. Il reussi a toute classer sans erreurs les doonées de tests.
