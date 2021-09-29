@@ -9,7 +9,6 @@ import numpy
 import time
 from math import log
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-from Q3C import ClassifieurAvecRejet
 
 matplotlib.rcParams['figure.figsize'] = (9.0, 7.0)
 

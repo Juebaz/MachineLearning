@@ -88,11 +88,11 @@ class ClassifieurAvecRejet:
             lambaLog = log(1-self._lambda)
            
             if probMax > lambaLog:
-               predictedClass.append(3)
+               predictedClass.append(rejectClass)
 
             else:
                 classe = self._classes[i]
-                predictedClass.append(0)
+                predictedClass.append(i)
 
         return numpy.array(predictedClass)
 
