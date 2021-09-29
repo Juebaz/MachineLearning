@@ -75,28 +75,26 @@ class ClassifieurAvecRejet:
         # Cette fonction peut supposer que fit() a préalablement été appelé.
         # Indice: vous pouvez appeler predict_proba() pour éviter une
         # redondance du code.
-        probForEachXtoBeEachC = self.predict_proba(X)
-        classWithHighiestProbForEachX = []
+        posteriorProbs = self.predict_proba(X)
+        predictedClass = []
 
         for index, x in enumerate(X):
-            prob = probForEachXtoBeEachC[index, :]
-            # denominateur = numpy.linalg.norm(prob)  # normaliser ???
-
-            # probNormalise = prob/1
+            prob = posteriorProbs[index, :]
+            
             i = numpy.argmax(prob)
             probMax = prob[i]
 
             rejectClass = len(self._classes)
             lambaLog = log(1-self._lambda)
-            print(probMax, lambaLog)
-            # if probMax > lambaLog:
-            #    classWithHighiestProbForEachX.append(5)
+           
+            if probMax > lambaLog:
+               predictedClass.append(3)
 
-            # else:
-            classe = self._classes[i]
-            classWithHighiestProbForEachX.append(classe)
+            else:
+                classe = self._classes[i]
+                predictedClass.append(0)
 
-        return numpy.array(classWithHighiestProbForEachX)
+        return numpy.array(predictedClass)
 
         # *****
 
