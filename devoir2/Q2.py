@@ -106,10 +106,9 @@ checkTime(TMAX_Q3A, "Q3A")
 fig = pyplot.figure()
 ax = fig.add_subplot(111)
 
-ax.set_title('Title')  # À modifier / to be modified
-# ax.plot(X, y, 'r--', label="Distance weights") # À compléter / to be completed
-# ax.plot(X, y, 'b--', label="Uniform weights")  # À compléter / to be completed
-# ax.set_xticks(X, X)
+ax.set_title('Accurcy of KNN classificator for different values of K')  # À modifier / to be modified
+ax.plot(K, scoresDistanceWeights, 'r--', label="Distance weights") # À compléter / to be completed
+ax.plot(K, scoresUniformWeights, 'b--', label="Uniform weights")  # À compléter / to be completed
 ax.grid(axis='x')
 ax.set_xlabel("Values of K")
 ax.set_ylabel("Accuracy (%)")
@@ -137,3 +136,4 @@ results['Discussion'].append(answer)
 # Affichage des erreurs
 df = pandas.DataFrame(results)
 display.display(df)
+pyplot.show()
