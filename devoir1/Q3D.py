@@ -32,7 +32,6 @@ def createLegendHandelsFor(data, colormap, lables):
             for i, label in enumerate(lables)]
 
 
-
 def make_meshgrid(x, y, h=0.1):
     x_min, x_max = x.min() - 1, x.max() + 1
     y_min, y_max = y.min() - 1, y.max() + 1
