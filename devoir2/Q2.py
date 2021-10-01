@@ -52,20 +52,32 @@ K = [1, 3, 5, 7, 11, 13, 15, 25, 35, 45]
 X = dataset.data
 y = dataset.target
 
-for k in K:
 
-    classifier = KNeighborsClassifier(n_neighbors=k)
-    loo = LeaveOneOut()
+def scoreForKValues(K, weight):
+    kresults = []
+    for k in K:
 
-    leaveOneOutResults = []
-    for train_index, test_index in loo.split(X, y):
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
-        
-        classifier.fit(X_train, y_train)
-        leaveOneOutResults.append(classifier.score(X_test, y_test))
-    
-    results[k] =  numpy.mean(numpy.array(leaveOneOutResults))
+        classifier = KNeighborsClassifier(n_neighbors=k, weights=weight)
+        loo = LeaveOneOut()
+
+        leaveOneOutResults = []
+        for train_index, test_index in loo.split(X, y):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+
+            classifier.fit(X_train, y_train)
+            leaveOneOutResults.append(classifier.score(X_test, y_test))
+
+        kresults.append(numpy.mean(numpy.array(leaveOneOutResults)))
+    return numpy.array(kresults)
+
+
+scoresUniformWeights = scoreForKValues(K, "uniform")
+scoresDistanceWeights = scoreForKValues(K, "distance")
+
+
+print(scoresDistanceWeights)
+print(scoresUniformWeights)
 
 # Stockez les performances obtenues (précision moyenne pour chaque valeur de k)
 # dans deux listes, scoresUniformWeights pour weights=uniform et
@@ -77,8 +89,7 @@ for k in K:
 # scoresDistanceWeights for weights=distance
 # The first element of each of these lists should contain the precision
 # for k=1, the second the precision for k=3, and so on.
-scoresUniformWeights = []
-scoresDistanceWeights = []
+
 # ******
 
 _times.append(time.time())
