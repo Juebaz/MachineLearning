@@ -26,9 +26,8 @@ def checkTime(maxduration, question):
               "Le temps maximum permis est de {0:.4f} secondes, mais votre code a requis {1:.4f} secondes! ".format(maxduration, duration) +
               "Assurez-vous que vous ne faites pas d'appels bloquants (par exemple à show()) dans cette boucle!")
 
-
 # Définition de la durée d'exécution maximales pour la question
-TMAX_Q3A = 15
+TMAX_Q3B = 30
 
 # Dictionnaire pour enregistrer les paramètres évalués
 results = collections.defaultdict(list)
@@ -39,14 +38,8 @@ results['Discussion'] = []
 
 _times.append(time.time())
 
-# *** TODO Q3A ***
-# Testez un classifeur K plus proches voisins sur le jeu de donnée
-# L'évaluation doit être faite en utilisant une approche leave-one-out
-# Testez avec k = {1, 3, 5, 7, 11, 13, 15, 25, 35, 45} et avec les valeurs
-# "uniform" et "distance" comme valeur de l'argument "weights".
-# N'oubliez pas de normaliser le jeu de données en utilisant minmax_scale!
 
-dataset = load_iris()
+dataset = load_breast_cancer()
 
 K = [1, 3, 5, 7, 11, 13, 15, 25, 35, 45]
 X = dataset.data
@@ -74,28 +67,12 @@ def scoreForKValues(K, weight):
 
 scoresUniformWeights = scoreForKValues(K, "uniform")
 scoresDistanceWeights = scoreForKValues(K, "distance")
-
-
-print(scoresDistanceWeights)
-print(scoresUniformWeights)
-
-# Stockez les performances obtenues (précision moyenne pour chaque valeur de k)
-# dans deux listes, scoresUniformWeights pour weights=uniform et
-# scoresDistanceWeights pour weights=distance
-# Le premier élément de chacune de ces listes devrait contenir la précision
-# pour k=1, le second la précision pour k=3, et ainsi de suite.
-# Store the obtained performances (average precision for each value of k)
-# in two lists, scoresUniformWeights for weights=uniform and
-# scoresDistanceWeights for weights=distance
-# The first element of each of these lists should contain the precision
-# for k=1, the second the precision for k=3, and so on.
-
 # ******
 
 _times.append(time.time())
-checkTime(TMAX_Q3A, "Q3A")
+checkTime(TMAX_Q3B, "Q3B")
 
-# *** TODO Q3A ***
+# *** TODO Q3B ***
 # Produisez un graphique contenant deux courbes, l'une pour weights=uniform
 # et l'autre pour weights=distance. L'axe x de la figure doit être le nombre
 # de voisins et l'axe y la performance en leave-one-out
@@ -106,16 +83,17 @@ checkTime(TMAX_Q3A, "Q3A")
 fig = pyplot.figure()
 ax = fig.add_subplot(111)
 
-ax.set_title('Accurcy of KNN classificator for different values of K')  # À modifier / to be modified
-ax.plot(K, scoresDistanceWeights, 'r--', label="Distance weights") # À compléter / to be completed
-ax.plot(K, scoresUniformWeights, 'b--', label="Uniform weights")  # À compléter / to be completed
+ax.set_title('Accurcy of KNN classificator for different values of K for breast cancer data')
+ax.plot(K, scoresDistanceWeights, 'r--', label="Distance weights")
+ax.plot(K, scoresUniformWeights, 'b--', label="Uniform weights")
+ax.legend()
 ax.grid(axis='x')
 ax.set_xlabel("Values of K")
 ax.set_ylabel("Accuracy (%)")
 
 # ******
 
-# *** TODO Q3A ***
+# *** TODO Q3B ***
 
 # Répondez aux quelques questions pour la discussion
 # Answer a few questions for discussion
