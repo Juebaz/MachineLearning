@@ -27,10 +27,11 @@ N2 = 10000
 
 def sample(N):
     x = numpy.linspace(minBorn, maxBorn, N)
-    y = pdf(x)                        # probability density function, pdf
-    cdf_y = numpy.cumsum(y)            # cumulative distribution function, cdf
-    cdf_y = cdf_y/cdf_y.max()       # takes care of normalizing cdf to 1.0
-    inverse_cdf = interpolate.interp1d(cdf_y, x)    # this is a function
+    y = pdf(x)                        
+
+    cdf_y = numpy.cumsum(y)          
+    cdf_y_normalize = cdf_y/cdf_y.max()       
+    inverse_cdf = interpolate.interp1d(cdf_y_normalize, x)   
     
     uniform_samples = random(int(N))
 
