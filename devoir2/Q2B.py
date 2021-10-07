@@ -54,15 +54,7 @@ class DiscriminantLineaire:
 
     def fit(self, X, y):
  
-        # Implémentez la fonction d'entraînement selon les équations développées
-        # à la question précédente.
-        # Implement the training function according to the equations developed at the
-        # previous question
-
-        # On initialise les poids aléatoirement
-        # Weights are randomly initialized
         w = numpy.random.rand(X.shape[1]+1)
-        w0 = 0
         
         for i in range(self.max_iter):
             N = X.shape[0]
@@ -70,27 +62,26 @@ class DiscriminantLineaire:
             for n in range(N):
                 
                 x = (numpy.append([1], X[n, :]))
-                y_pred = numpy.sum(w.T*x + w0)
+                y_pred = numpy.sum(w.T*x)
 
                 if (y_pred >= 0):
                     y_pred = 1
                 
                 else:
                     y_pred = 0
-
+        
+        #update parameters
                 normXSquare = numpy.linalg.norm(X[n, :])**2
             
                 D_w = (-1/normXSquare) * numpy.sum(x * (y[n] - y_pred))
                 D_w0 = (-1/normXSquare) * numpy.sum(y[n] - y_pred)
 
                 w = w - self.eta * D_w
-                w0 = w0 - self.eta * D_w0
+                w[0] = w[0] - self.eta * D_w0
 
         # Copie des poids entraînés dans une variable membre pour les conserver
         # Copy trained weights in a member variable for storing
-        print(w)
         self.w = w
-        self.w0 = w0
 
     def predict(self, X):
         
@@ -99,7 +90,7 @@ class DiscriminantLineaire:
         for n in range(X.shape[0]):
             y_pred =1;
             x = (numpy.append([1], X[n, :]))
-            h = numpy.sum(self.w*x+self.w0)
+            h = numpy.sum(self.w.T*x)
             if (h >= 0):
                     y_pred = 1
             else:
