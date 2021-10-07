@@ -95,31 +95,22 @@ class DiscriminantLineaire:
     def predict(self, X):
         
         Y = numpy.zeros(X.shape[0])
+        
         for n in range(X.shape[0]):
             y_pred =1;
-            h = self.w*X[n,:]+self.w0 
+            x = (numpy.append([1], X[n, :]))
+            h = numpy.sum(self.w*x+self.w0)
             if (h >= 0):
                     y_pred = 1
             else:
                     y_pred = 0
             Y[n] = y_pred
+        return Y
         
         # ******
 
     def score(self, X, y):
-        # *** TODO Q2B ***
-        # Implémentez la fonction retournant le score (précision / accuracy)
-        # du classifieur sur les données reçues en argument.
-        # Vous pouvez supposer que fit() a préalablement été exécuté
-        # Indice : réutiliser votre implémentation de predict() réduit de
-        # beaucoup la taille de cette fonction!
-        # Implement the function returning the classifier score (accuracy)
-        # on data received as argument.
-        # You can assume that fit() has been executed before
-        # Tip: reusing your implementation of predict() reduce significantly the
-        # size of this function!
-
-        # Retirez le "pass" et complétez le code ici
-        # Remove the "pass" and complete the code here
-        pass
-        # ******
+        predictions = self.predict(X)
+        accuracy = numpy.sum(y == predictions) / len(y)
+        print(accuracy)
+        return accuracy 

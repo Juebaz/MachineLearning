@@ -28,10 +28,10 @@ X, y = make_classification(n_features=2,
 discriminant = DiscriminantLineaire()
 
 discriminant.fit(X,y)
-ypred = discriminant.predict(X)
-print(ypred)
+# ypred = discriminant.predict(X)
+discriminant.score(X,y)
+
 
 l = LinearDiscriminantAnalysis()
 l.fit(X,y)
-l.predict()
-
+l.score(X,y)
