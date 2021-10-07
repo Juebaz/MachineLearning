@@ -93,6 +93,7 @@ checkTime(TMAX_Q3A, "Q3A")
 # and the other for weights=distance. The x axis of the figure should be the number
 # of neighbours and the y-axis the leave-one-out performance
 
+
 fig = pyplot.figure()
 ax = fig.add_subplot(111)
 

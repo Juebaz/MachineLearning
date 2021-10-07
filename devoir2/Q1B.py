@@ -73,6 +73,12 @@ e = kde.score_samples(s.reshape(-1, 1))
 pyplot.plot(s, e)
 
 
+x_d = numpy.linspace(minBorn, maxBorn, 1000)
+density = sum(norm(xi).pdf(x_d) for xi in x)
+
+pyplot.fill_between(x_d, density, alpha=0.5)
+pyplot.plot(x, numpy.full_like(x, -0.1), '|k', markeredgewidth=1)
+
 # Affichage du graphique
 _times.append(time.time())
 checkTime(TMAX_Q1B, "Q1B")
