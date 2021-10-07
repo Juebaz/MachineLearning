@@ -62,7 +62,7 @@ class DiscriminantLineaire:
             for n in range(N):
                 
                 x = (numpy.append([1], X[n, :]))
-                y_pred = numpy.sum(w.T*x)
+                y_pred = numpy.dot(w.T,x)
 
                 if (y_pred >= 0):
                     y_pred = 1
@@ -90,7 +90,7 @@ class DiscriminantLineaire:
         for n in range(X.shape[0]):
             y_pred =1;
             x = (numpy.append([1], X[n, :]))
-            h = numpy.sum(self.w.T*x)
+            h = numpy.dot(self.w.T,x)
             if (h >= 0):
                     y_pred = 1
             else:
