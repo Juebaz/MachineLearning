@@ -103,5 +103,4 @@ class DiscriminantLineaire:
     def score(self, X, y):
         predictions = self.predict(X)
         accuracy = numpy.sum(y == predictions) / len(y)
-        print(accuracy)
         return accuracy 

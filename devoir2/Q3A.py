@@ -116,13 +116,16 @@ ax.set_ylabel("Performance (%)")
 # What is the impact of the layout of the data in the space?
 answer = "Impact de la disposition \
           des données dans l'espace: "
-results['Discussion'].append(answer)
+results['Discussion'].append("Si le nombre de feature est élevée, la distance entre les points agmente exponentiellement." +
+"Et donc les données sont moins dense et on doit chercher plus loins pour trouver le plus proche voisin qui peut alors n'avoir presque rien en commun avec le point."+
+"Aussi, plus les classes sont mélanger et ne forme pas des frontières claire, plus cela prend un nombre de voisin élevé pour faire une classification qui se rapproche de la réalité. "
+)
 
 # Quel est le nombre de voisins $k$ optimal à utiliser?
 # What is the optimal number of $k$ neighbors to use?
 answer = "Valeur de k optimale?: \
           "
-results['Discussion'].append(answer)
+results['Discussion'].append("Dans notre cas, la valeur optimal se situe environ entre 12 et 16")
 # ******
 
 # Affichage des erreurs
