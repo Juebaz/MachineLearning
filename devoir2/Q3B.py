@@ -27,7 +27,7 @@ def checkTime(maxduration, question):
               "Assurez-vous que vous ne faites pas d'appels bloquants (par exemple à show()) dans cette boucle!")
 
 # Définition de la durée d'exécution maximales pour la question
-TMAX_Q3B = 30
+TMAX_Q3B = 260
 
 # Dictionnaire pour enregistrer les paramètres évalués
 results = collections.defaultdict(list)
