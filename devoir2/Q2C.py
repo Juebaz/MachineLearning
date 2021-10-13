@@ -14,7 +14,6 @@ import collections
 import time
 import numpy
 import pandas
-from Q2B import DiscriminantLineaire
 
 _times = []
 
