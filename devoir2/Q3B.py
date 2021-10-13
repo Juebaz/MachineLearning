@@ -100,13 +100,12 @@ ax.set_ylabel("Accuracy (%)")
 
 # Quel est l'impact de la disposition des données dans l'espace?
 # What is the impact of the layout of the data in the space?
-answer = "Impact de la disposition \
-          des données dans l'espace: "
+answer = "Les données sont répartie de tel sorte que si on augmente le nombre de voisin utiliser on diminue l'efficacité du classement. Et donc, les données ne forme pas une barriere et sont près les uns de autres"
 results['Discussion'].append(answer)
 
 # Quel est le nombre de voisins $k$ optimal à utiliser?
 # What is the optimal number of $k$ neighbors to use?
-answer = "Valeur de k optimale?: \
+answer = "autour de 5 ou entre 12 et 15 \
           "
 results['Discussion'].append(answer)
 # ******
