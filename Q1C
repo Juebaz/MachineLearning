@@ -1,0 +1,6 @@
+$\text{Dans les deux méthodes, on veut faire une estimation d'une valeur x, selon un certain intervalle, tout en tenant compte du nombre de points près de celui-ci.}$
+$\text{La différence entre les deux est que l'estimation par densité de noyau définis une largeur spécifique et constante pour déterminer la valeur x, alors que}$
+$\text{la k-PPV a des intervalles de largeurs variables qui dépandent de la quantité de points près de la valeur centrale.}$
+$\text{On devrait donc voir une courbe moins lisses dans les régions où que la densité est très grande, comme autour de 0 dans une courbe normale(0,1), pour}$
+$\text{l'estimation par noyau, puisqu'il y a beaucoup plus de donnée dans l'intervalle, que dans les extrémités.}$
+$\text{Les deux méthodes sont plutôt simple et rapides d'utilisation dans le cas que nous avons un petit jeu de données, et qui sont relativement près des autres.}$ 
