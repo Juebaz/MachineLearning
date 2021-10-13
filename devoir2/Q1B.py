@@ -64,20 +64,23 @@ def sample(N):
 # estimated with kernel sizes (bandwidth) of {0.3, 1, 2, 5}, in
 # the same figure, but plotted with different colours.
 # ******
-x = sample(N2).reshape(-1, 1)
-kde = KernelDensity(kernel='tophat', bandwidth=1).fit(x)
-s = numpy.linspace(minBorn, maxBorn, N2)
+
+fig, subfigs = pyplot.subplots(1, 2, tight_layout=True)
+for n, subfig in zip({N1,N2}, subfigs.reshape(-1)):
 
 
-e = kde.score_samples(s.reshape(-1, 1))
-pyplot.plot(s, e)
+    for bandwith in {0.3,1,2,5}:
+        x = sample(n).reshape(-1, 1)
+        kde = KernelDensity(kernel='tophat', bandwidth=bandwith).fit(x)
+        s = numpy.linspace(minBorn, maxBorn, n)
+
+        e = kde.score_samples(s.reshape(-1, 1))
+        subfig.plot(s, e, label=bandwith)
+        subfig.legend(loc="upper right")
+        
+    subfig.set_title(n)
 
 
-x_d = numpy.linspace(minBorn, maxBorn, 1000)
-density = sum(norm(xi).pdf(x_d) for xi in x)
-
-pyplot.fill_between(x_d, density, alpha=0.5)
-pyplot.plot(x, numpy.full_like(x, -0.1), '|k', markeredgewidth=1)
 
 # Affichage du graphique
 _times.append(time.time())
