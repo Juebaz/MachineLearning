@@ -188,7 +188,7 @@ param_grid = {'hidden_layer_sizes': [5, 10, 100],
               'activation': ['relu', 'identity', 'tanh', 'logistic']}
 
 start_time = time.time()
-grid = GridSearchCV(MLPClassifier(max_iter=1000), param_grid,
+grid = GridSearchCV(MLPClassifier(max_iter=100), param_grid,
                     refit=True, n_jobs=-1)
 time_train = time.time() - start_time
 
