@@ -120,7 +120,7 @@ if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
 
-n_neighbors_possible = [1, 3, 5, 10, 50,100]
+n_neighbors_possible = [1, 3, 5, 10]
 weights_possible = ["uniform", "distance"]
 
 time_train = 0
@@ -157,7 +157,7 @@ clf_name = clf_svc.__class__.__name__
 if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
-C_possible = [0.1, 1, 50, 10, 100]
+C_possible = [0.1, 1, 5]
 gamma_possible = [0.1, 0.2, 0.5]
 
 time_train = 0
@@ -203,7 +203,7 @@ optimal_hp1_pcm = 0
 optimal_hp2_pcm = 0
 score_train_pcm = 0
 
-hidden_layer_sizes_possible = [5, 10, 5, 10, 100, 200]
+hidden_layer_sizes_possible = [5, 10]
 activation_possible = ['relu', 'identity', 'tanh', 'logistic']
 
 for hidden_layer_sizes, activation in itertools.product(hidden_layer_sizes_possible, activation_possible):
