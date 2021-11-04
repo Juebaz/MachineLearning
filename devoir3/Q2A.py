@@ -18,6 +18,7 @@ import pandas
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import ShuffleSplit
+from sklearn.model_selection import GridSearchCV
 
 
 pandas.set_option('display.max_colwidth', 0)
@@ -120,115 +121,97 @@ if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
 
-n_neighbors_possible = [1, 3, 5, 10, 50, 100]
-weights_possible = ["uniform", "distance"]
+param_grid = {'n_neighbors': [1, 3, 5, 10, 50, 100],
+              'weights': ["uniform", "distance"]}
 
-time_train = 0
+start_time = time.time()
+grid = GridSearchCV(KNeighborsClassifier(), param_grid, refit=True, n_jobs=-1)
+time_train = time.time() - start_time
 
-optimal_hp1_knn = 0
-optimal_hp2_knn = 0
-score_train_knn = 0
+grid.fit(X_train, y_train)
 
-for n_neighbors, weights in itertools.product(n_neighbors_possible, weights_possible):
-    classifieur_kpp = KNeighborsClassifier(
-        n_neighbors=n_neighbors, weights=weights)
-
-    start_time = time.time()
-    score = fitWithCrossValidation(classifieur_kpp, X_train, y_train)
-    time_train = time.time() - start_time
-
-    if score > score_train_knn:
-        optimal_hp1_knn = n_neighbors
-        optimal_hp2_knn = weights
-        score_train_knn = score
+score_train_knn = grid.best_score_
 
 
 results['Time_train'].append(time_train)
 
+optimal_hp1_knn = grid.best_params_['n_neighbors']
+optimal_hp2_knn = grid.best_params_['weights']
+
 results['Score_train'].append(score_train_knn)
-results['Optimal_hp1'].append(optimal_hp1_knn)
-results['Optimal_hp2'].append(optimal_hp2_knn)
+results['Optimal_hp1'].append(grid.best_params_['n_neighbors'])
+results['Optimal_hp2'].append(grid.best_params_['weights'])
 _times.append(time.time())
 checkTime(TMAX_KNN, "k-plus proches voisins")
 
-# svm a noyau gausin
+# # svm a noyau gausin
 clf_svc = SVC()
 clf_name = clf_svc.__class__.__name__
 if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
-C_possible = [0.1, 1, 50, 10, 100]
-gamma_possible = [0.1, 0.2, 0.5]
 
-time_train = 0
+param_grid = {'C': [0.1, 1, 50, 10, 100],
+              'gamma': [0.1, 0.2, 0.5]}
 
-optimal_hp1_svm = 0
-optimal_hp2_svm = 0
-score_train_svm = 0
+start_time = time.time()
+grid = GridSearchCV(SVC(), param_grid,
+                    refit=True, n_jobs=-1)
+time_train = time.time() - start_time
 
-for C, gamma in itertools.product(C_possible, gamma_possible):
+grid.fit(X_train, y_train)
 
-    # On initialise le classfieur kPP avec les hyperparametres de la grille
-    classifieur_svm = SVC(C=C, kernel='rbf', gamma=gamma)
+score_train_svm = grid.best_score_
 
-    start_time = time.time()
-    score = fitWithCrossValidation(classifieur_svm, X_train, y_train)
-    time_train = time.time() - start_time
-
-    if score > score_train_svm:
-        optimal_hp1_svm = C
-        optimal_hp2_svm = gamma
-        score_train_svm = score
 
 results['Time_train'].append(time_train)
-results['Optimal_hp1'].append(optimal_hp1_svm)
-results['Optimal_hp2'].append(optimal_hp2_svm)
+
+optimal_hp1_svm = grid.best_params_['C']
+optimal_hp2_svm = grid.best_params_['gamma']
+
+
 results['Score_train'].append(score_train_svm)
+results['Optimal_hp1'].append(grid.best_params_['C'])
+results['Optimal_hp2'].append(grid.best_params_['gamma'])
 _times.append(time.time())
 checkTime(TMAX_SVM, "Support vector machine")
 
 
-# perceptron multicouches
+# # perceptron multicouches
 
 clf_mlp = MLPClassifier()
 clf_name = clf_mlp.__class__.__name__
 if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
+param_grid = {'hidden_layer_sizes': [5, 10, 100],
+              'activation': ['relu', 'identity', 'tanh', 'logistic']}
 
-time_train = 0
+start_time = time.time()
+grid = GridSearchCV(MLPClassifier(max_iter=1000), param_grid,
+                    refit=True, n_jobs=-1)
+time_train = time.time() - start_time
 
-optimal_hp1_pcm = 0
-optimal_hp2_pcm = 0
-score_train_pcm = 0
+grid.fit(X_train, y_train)
 
-hidden_layer_sizes_possible = [5, 10, 5, 10, 100, 200]
-activation_possible = ['relu', 'identity', 'tanh', 'logistic']
+score_train_svm = grid.best_score_
 
-for hidden_layer_sizes, activation in itertools.product(hidden_layer_sizes_possible, activation_possible):
-
-    # On initialise le classfieur kPP avec les hyperparametres de la grille
-    classifieur_mlp = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
-                                    activation=activation, max_iter=1000)
-
-    start_time = time.time()
-    score = fitWithCrossValidation(classifieur_mlp, X_train, y_train)
-    time_train = time.time() - start_time
-
-    if score > score_train_pcm:
-        optimal_hp1_pcm = hidden_layer_sizes
-        optimal_hp2_pcm = activation
-        score_train_pcm = score
 
 results['Time_train'].append(time_train)
-results['Optimal_hp1'].append(optimal_hp1_pcm)
-results['Optimal_hp2'].append(optimal_hp2_pcm)
-results['Score_train'].append(score_train_pcm)
+
+optimal_hp2_pcm = grid.best_params_['activation']
+optimal_hp1_pcm = grid.best_params_['hidden_layer_sizes']
+
+
+results['Score_train'].append(score_train_svm)
+results['Optimal_hp1'].append(grid.best_params_['activation'])
+results['Optimal_hp2'].append(grid.best_params_['hidden_layer_sizes'])
+
 _times.append(time.time())
 checkTime(TMAX_MLP, "Perceptron multicouche")
 
 
-# partie 2 apres avoir optimizer
+# # partie 2 apres avoir optimizer
 
 model_final_kpp = KNeighborsClassifier(
     n_neighbors=optimal_hp1_knn, weights=optimal_hp2_knn)
@@ -262,6 +245,6 @@ checkTime(TMAX_EVAL, "Evaluation des modèles")
 
 # Affichage des résultats
 # Display results
-# df = pandas.DataFrame(results)
-# display.display(df)
+df = pandas.DataFrame(results)
+display.display(df)
 print(results)
