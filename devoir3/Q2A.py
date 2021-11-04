@@ -118,9 +118,9 @@ weights_possible = ["uniform", "distance"]
 
 time_train = 0
 
-optimal_hp1 = 0
-optimal_hp2 = 0
-score_train = 0
+optimal_hp1_knn = 0
+optimal_hp2_knn = 0
+score_train_knn = 0
 
 for n_neighbors, weights in itertools.product(n_neighbors_possible, weights_possible):
     classifieur_kpp = KNeighborsClassifier(
@@ -128,17 +128,17 @@ for n_neighbors, weights in itertools.product(n_neighbors_possible, weights_poss
     classifieur_kpp.fit(X_train, y_train)
     score = classifieur_kpp.score(X_test, y_test)
 
-    if score > score_train:
-        optimal_hp1 = n_neighbors
-        optimal_hp2 = weights
-        score_train = score
+    if score > score_train_knn:
+        optimal_hp1_knn = n_neighbors
+        optimal_hp2_knn = weights
+        score_train_knn = score
 
 
 results['Time_train'].append(time_train)
 
-results['Score_train'].append(score_train)
-results['Optimal_hp1'].append(n_neighbors_possible)
-results['Optimal_hp2'].append(weights_possible)
+results['Score_train'].append(score_train_knn)
+results['Optimal_hp1'].append(optimal_hp1_knn)
+results['Optimal_hp2'].append(optimal_hp2_knn)
 _times.append(time.time())
 checkTime(TMAX_KNN, "k-plus proches voisins")
 
@@ -151,9 +151,11 @@ if clf_name not in results['Classifiers']:
 C_possible = [0.1, 1, 5, 10, 100, 1000]
 gamma_possible = [0.1, 0.2, 0.5]
 
-optimal_hp1 = 0
-optimal_hp2 = 0
-score_train = 0
+time_train = 0
+
+optimal_hp1_svm = 0
+optimal_hp2_svm = 0
+score_train_svm = 0
 
 for C, gamma in itertools.product(C_possible, gamma_possible):
 
@@ -162,18 +164,16 @@ for C, gamma in itertools.product(C_possible, gamma_possible):
 
     classifieur_svm.fit(X_train, y_train)
 
-    score = classifieur_svm.score(X_test, y_test)
-    print(C, gamma, score)
-    if score > score_train:
-        optimal_hp1 = C
-        optimal_hp2 = gamma
-        score_train = score
-
-print(optimal_hp1, optimal_hp2, score_train)
+    score = classifieur_svm.score(X_train, y_train)
+    if score > score_train_svm:
+        optimal_hp1_svm = C
+        optimal_hp2_svm = gamma
+        score_train_svm = score
 
 results['Time_train'].append(time_train)
-results['Optimal_hp1'].append(optimal_hp1)
-results['Optimal_hp2'].append(optimal_hp2)
+results['Optimal_hp1'].append(optimal_hp1_svm)
+results['Optimal_hp2'].append(optimal_hp2_svm)
+results['Score_train'].append(score_train_svm)
 _times.append(time.time())
 checkTime(TMAX_SVM, "Support vector machine")
 
@@ -185,9 +185,12 @@ clf_name = clf_mlp.__class__.__name__
 if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
-optimal_hp1 = 0
-optimal_hp2 = 0
-score_train = 0
+
+time_train = 0
+
+optimal_hp1_pcm = 0
+optimal_hp2_pcm = 0
+score_train_pcm = 0
 
 hidden_layer_sizes_possible = [5, 10, 100, 200, 500]
 activation_possible = ['relu', 'identity', 'tanh', 'logistic']
@@ -199,15 +202,54 @@ for hidden_layer_sizes, activation in itertools.product(hidden_layer_sizes_possi
                                     activation=activation)
 
     classifieur_mlp.fit(X_train, y_train)
-    score = classifieur_mlp.score(X_test, y_test)
+    score = classifieur_mlp.score(X_train, y_train)
 
-    if score > score_train:
-        optimal_hp1 = hidden_layer_sizes
-        optimal_hp2 = activation
-        score_train = score
+    if score > score_train_pcm:
+        optimal_hp1_pcm = hidden_layer_sizes
+        optimal_hp2_pcm = activation
+        score_train_pcm = score
 
 results['Time_train'].append(time_train)
-results['Optimal_hp1'].append(optimal_hp1)
-results['Optimal_hp2'].append(optimal_hp2)
+results['Optimal_hp1'].append(optimal_hp1_pcm)
+results['Optimal_hp2'].append(optimal_hp2_pcm)
+results['Score_train'].append(score_train_pcm)
 _times.append(time.time())
 checkTime(TMAX_MLP, "Perceptron multicouche")
+
+
+# partie 2 apres avoir optimizer
+
+model_final_kpp = KNeighborsClassifier(
+    n_neighbors=optimal_hp1_knn, weights=optimal_hp2_knn)
+model_final_svm = SVC(C=optimal_hp1_svm, gamma=optimal_hp2_svm)
+model_final_mlp = MLPClassifier(
+    hidden_layer_sizes=optimal_hp1_pcm, activation=optimal_hp2_pcm)
+
+# On reentraine les modeles sur le jeu de donnees entrainement complet
+model_final_kpp.fit(X_train, y_train)
+model_final_svm.fit(X_train, y_train)
+model_final_mlp.fit(X_train, y_train)
+
+score_knn = model_final_kpp.score(X_test, y_test)
+score_svm = model_final_svm.score(X_test, y_test)
+score_mlp = model_final_mlp.score(X_test, y_test)
+
+results['Time_test'].append(0)
+results['Score_test'].append(score_knn)
+
+
+results['Time_test'].append(0)
+results['Score_test'].append(score_svm)
+
+
+results['Time_test'].append(0)
+results['Score_test'].append(score_mlp)
+
+_times.append(time.time())
+checkTime(TMAX_EVAL, "Evaluation des modèles")
+
+# Affichage des résultats
+# Display results
+df = pandas.DataFrame(results)
+display.display(df)
+print(results)
