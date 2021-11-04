@@ -120,7 +120,7 @@ if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
 
 
-n_neighbors_possible = [1, 3, 5, 10, 50,100]
+n_neighbors_possible = [1, 3, 5, 10, 50, 100]
 weights_possible = ["uniform", "distance"]
 
 time_train = 0
@@ -132,10 +132,10 @@ score_train_knn = 0
 for n_neighbors, weights in itertools.product(n_neighbors_possible, weights_possible):
     classifieur_kpp = KNeighborsClassifier(
         n_neighbors=n_neighbors, weights=weights)
+
     start_time = time.time()
-    classifieur_kpp.fit(X_train, y_train)
+    score = fitWithCrossValidation(classifieur_kpp, X_train, y_train)
     time_train = time.time() - start_time
-    score = classifieur_kpp.score(X_test, y_test)
 
     if score > score_train_knn:
         optimal_hp1_knn = n_neighbors
@@ -172,10 +172,9 @@ for C, gamma in itertools.product(C_possible, gamma_possible):
     classifieur_svm = SVC(C=C, kernel='rbf', gamma=gamma)
 
     start_time = time.time()
-    classifieur_svm.fit(X_train, y_train)
+    score = fitWithCrossValidation(classifieur_svm, X_train, y_train)
     time_train = time.time() - start_time
 
-    score = classifieur_svm.score(X_train, y_train)
     if score > score_train_svm:
         optimal_hp1_svm = C
         optimal_hp2_svm = gamma
@@ -210,12 +209,11 @@ for hidden_layer_sizes, activation in itertools.product(hidden_layer_sizes_possi
 
     # On initialise le classfieur kPP avec les hyperparametres de la grille
     classifieur_mlp = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
-                                    activation=activation)
+                                    activation=activation, max_iter=1000)
 
     start_time = time.time()
-    classifieur_mlp.fit(X_train, y_train)
+    score = fitWithCrossValidation(classifieur_mlp, X_train, y_train)
     time_train = time.time() - start_time
-    score = classifieur_mlp.score(X_train, y_train)
 
     if score > score_train_pcm:
         optimal_hp1_pcm = hidden_layer_sizes
@@ -264,6 +262,6 @@ checkTime(TMAX_EVAL, "Evaluation des modèles")
 
 # Affichage des résultats
 # Display results
-df = pandas.DataFrame(results)
-display.display(df)
+# df = pandas.DataFrame(results)
+# display.display(df)
 print(results)
