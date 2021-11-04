@@ -184,3 +184,30 @@ clf_mlp = MLPClassifier()
 clf_name = clf_mlp.__class__.__name__
 if clf_name not in results['Classifiers']:
     results['Classifiers'].append(clf_name)
+
+optimal_hp1 = 0
+optimal_hp2 = 0
+score_train = 0
+
+hidden_layer_sizes_possible = [5, 10, 100, 200, 500]
+activation_possible = ['relu', 'identity', 'tanh', 'logistic']
+
+for hidden_layer_sizes, activation in itertools.product(hidden_layer_sizes_possible, activation_possible):
+
+    # On initialise le classfieur kPP avec les hyperparametres de la grille
+    classifieur_mlp = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes,
+                                    activation=activation)
+
+    classifieur_mlp.fit(X_train, y_train)
+    score = classifieur_mlp.score(X_test, y_test)
+
+    if score > score_train:
+        optimal_hp1 = hidden_layer_sizes
+        optimal_hp2 = activation
+        score_train = score
+
+results['Time_train'].append(time_train)
+results['Optimal_hp1'].append(optimal_hp1)
+results['Optimal_hp2'].append(optimal_hp2)
+_times.append(time.time())
+checkTime(TMAX_MLP, "Perceptron multicouche")
