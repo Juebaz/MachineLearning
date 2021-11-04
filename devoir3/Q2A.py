@@ -107,6 +107,11 @@ results = {'Classifiers': [],
 _times.append(time.time())
 
 # knn
+clf_knn = KNeighborsClassifier()
+clf_name = clf_knn.__class__.__name__
+if clf_name not in results['Classifiers']:
+    results['Classifiers'].append(clf_name)
+
 
 n_neighbors_possible = [1, 3, 5, 10, 20, 50, 100]
 weights_possible = ["uniform", "distance"]
@@ -132,7 +137,50 @@ for n_neighbors, weights in itertools.product(n_neighbors_possible, weights_poss
 results['Time_train'].append(time_train)
 
 results['Score_train'].append(score_train)
+results['Optimal_hp1'].append(n_neighbors_possible)
+results['Optimal_hp2'].append(weights_possible)
+_times.append(time.time())
+checkTime(TMAX_KNN, "k-plus proches voisins")
+
+# svm a noyau gausin
+clf_svc = SVC()
+clf_name = clf_svc.__class__.__name__
+if clf_name not in results['Classifiers']:
+    results['Classifiers'].append(clf_name)
+
+C_possible = [0.1, 1, 5, 10, 100, 1000]
+gamma_possible = [0.1, 0.2, 0.5]
+
+optimal_hp1 = 0
+optimal_hp2 = 0
+score_train = 0
+
+for C, gamma in itertools.product(C_possible, gamma_possible):
+
+    # On initialise le classfieur kPP avec les hyperparametres de la grille
+    classifieur_svm = SVC(C=C, kernel='rbf', gamma=gamma)
+
+    classifieur_svm.fit(X_train, y_train)
+
+    score = classifieur_svm.score(X_test, y_test)
+    print(C, gamma, score)
+    if score > score_train:
+        optimal_hp1 = C
+        optimal_hp2 = gamma
+        score_train = score
+
+print(optimal_hp1, optimal_hp2, score_train)
+
+results['Time_train'].append(time_train)
 results['Optimal_hp1'].append(optimal_hp1)
 results['Optimal_hp2'].append(optimal_hp2)
 _times.append(time.time())
-checkTime(TMAX_KNN, "k-plus proches voisins")
+checkTime(TMAX_SVM, "Support vector machine")
+
+
+# perceptron multicouches
+
+clf_mlp = MLPClassifier()
+clf_name = clf_mlp.__class__.__name__
+if clf_name not in results['Classifiers']:
+    results['Classifiers'].append(clf_name)
