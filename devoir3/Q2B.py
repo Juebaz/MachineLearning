@@ -247,4 +247,3 @@ checkTime(TMAX_EVAL, "Evaluation des modèles")
 # Display results
 df = pandas.DataFrame(results)
 display.display(df)
-print(results)

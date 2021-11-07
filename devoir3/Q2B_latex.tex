@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\title{devoir3Q1}
+\author{jujubazzz95 }
+\date{November 2021}
+
+\begin{document}
+
+\maketitle
+
+\section{Question1}
+
+\subsection{La couche de sortie}
+
+Pour trouver les poids, on dérive l'erreur quadratique par rapport au poids $ w_{j,i}$
+$$
+\Delta w_{j,i} = -\eta \frac{\partial E}{\partial w_{j,i}}= \frac{-\eta}{N} \sum_{t=1}^{N} \frac{\partial E^t}{\partial w_{j,i}}
+$$
+
+La dérivé peut être exprimer comme :
+
+\begin{align}
+    \frac{\partial E^t}{\partial w_{j,i}}=\frac{\partial E^t}{\partial e_{j}^t}\frac{\partial e_{j}^t}{\partial p(z)_{j}^t}\frac{\partial p(z)_{j}^t}{\partial z_{j}^t}\frac{\partial z_{j}^t}{\partial w_{j,i}}
+\end{align}
+
+
+\begin{align}
+\frac{\partial E^t}{\partial e_{j}^t}=\frac{\partial}{\partial e_{j}^t}\Big[\frac{1}{2}\sum_{l=1}^N(e_l^t)^2\Big] = e_j^t
+\end{align}
+
+\begin{align}
+\frac{\partial e_j^t}{\partial p_{j}^t}=\frac{\partial}{\partial p_j^t}(r_i^t-y_i^t)=-1
+\end{align}
+
+On considère ici que $p(z)$ est $p(z_j^t)$ considérant donc la somme pondérée des poids
+\begin{align}
+\frac{\partial p_j^t}{\partial z_{j}^t}=\frac{\partial}{\partial z_j^t}\Bigg[\frac{\exp{(2z_j^t)-1}}{\exp(2z_j^t)+1}\Bigg]=\frac{\partial}{\partial z_j^t} \tanh(z_{j}^t)=sech(z_{j}^t)^2
+\end{align}
+
+\begin{align}
+\frac{\partial z_j^t}{\partial w_{j,i}}=\frac{\partial}{\partial w_{j,i}}\sum_{k=1}^R
+ w_{j,i}y_k^t+w_{j,0}=p_i^t
+\end{align}
+
+\begin{align}
+\frac{\partial z_j^t}{\partial w_{j,0}}=\frac{\partial}{\partial w_{j,i}}\sum_{k=1}^R
+ w_{j,i}y_k^t+w_{j,0}=1
+\end{align}
+ 
+En prenant les résultats suivant et en les mettant dans l'équation 1 on obtient 
+\begin{align}
+&\Delta w_{j,i}=\frac{\eta}{N} \sum_{t=1}^N e_j^t(sech(z_{j}^t)^2)p_i^t 
+&\Delta w_{j,0}=\frac{\eta}{N} \times \sum_{t=1}^N e_j^t(sech(z_{j}^t)^2)
+\end{align}
+
+\subsection{La couche cachée}
+
+On trouves les poids des neurones de la couche cachée en prenant encore une fois la dérivée partielle de l'erreur quadratique en fonction des poids
+
+\begin{align}
+\frac{\partial E^t}{\partial w_{j,i}}=\frac{\partial E^t}{\partial p_{j}^t}\frac{\partial p_{j}^t}{\partial z_{j}^t}\frac{\partial z_{j}^t}{\partial w_{j,i}}
+\end{align}
+
+
+On a déja calculé $\frac{\partial p_{j}^t}{\partial z_{j}^t}$ et $\frac{\partial z_{j}^t}{\partial w_{j,i}}$
+
+Calculons $\frac{\partial E^t}{\partial p_{j}^t}$
+
+\begin{align}
+    \frac{\partial E^t}{\partial p_{j}^t} &= \frac{\partial}{\partial p_{j}^t} \Big[\frac{1}{2}\sum_{l=1}^N(e_l^t)^2\Big]\\
+    &=  \Big[\frac{2}{2}\sum_{l=1}^N (e_l^t)\frac{\partial}{\partial p_{j}^t}(e_l^t)\Big]\\
+    &= \Big[\sum_{l=1}^N(e_l^t)\frac{\partial}{\partial p_{j}^t}(r_j-p^t_j)\Big]\\
+    &= \sum_{l=1}^N -e^t_k
+    &=
+\end{align}
+
+En mettant tout ensemble on obtient: 
+
+\begin{align}
+\Delta w_{j,i} &= \frac{\eta}{N}  \sum_{k=1}^K e_k^t(sech(z_j^t)^2)p_i^t \\
+\Delta w_{j,0} &= \frac{\eta}{N}  \sum_{t=1}^N e_j^t(sech(z_j^t)^2)
+\end{align}
+
+
+\end{document}
