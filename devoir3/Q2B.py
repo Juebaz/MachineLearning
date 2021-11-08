@@ -82,11 +82,6 @@ DRIVE_ID = '1OxSkSF2RLDUcAyFd1MpG3RYBHOX8ni4V'
 
 # Question 2A
 
-def fitWithCrossValidation(clf, X, y):
-    cv = ShuffleSplit(n_splits=5, test_size=0.3, random_state=0)
-    scores = cross_val_score(clf, X, y, cv=cv)
-    return numpy.mean(scores)
-
 
 # Initialisation du jeu de données Pendigits
 # Initializing Pendigits dataset
